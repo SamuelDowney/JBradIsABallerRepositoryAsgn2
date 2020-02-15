@@ -1,0 +1,710 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Spikes API
+  description: RESTful API for Drake University Apparel
+servers:
+  - url: http://localhost:5555
+    description: Local Development
+  - url: https://api-dev.drake.drake/
+    description: Dev Environment
+  - url: https://api.drake.drake/
+    description: Prod Environment
+paths:
+  /items:
+    get:
+      description: Returns a collection of items
+      responses:
+        "200":
+          description: A collection of items
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Items"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: Adds a new item
+      requestBody:
+        description: Item to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+      responses:
+        "201":
+          description: Item successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "303":
+          description: See Other
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Location of an existing item
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+  "/items/{itemId}":
+    get:
+      description: Returns an item
+      parameters:
+        - name: itemId
+          in: path
+          description: Identifier for an item
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: An item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemNotFound"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: Updates an item
+      requestBody:
+        description: Item to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+      parameters:
+        - name: itemId
+          in: path
+          description: Identifier for an item
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Item successfully updated
+        "404":
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemNotFound"
+    delete:
+      description: Deletes an item
+      parameters:
+        - name: itemId
+          in: path
+          description: Identifier for an item
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Item successfully deleted
+        "404":
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemNotFound"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /customers:
+    get:
+      description: Returns a collection of customers
+      responses: 
+        "200":
+          description: A collection of customers
+          content:
+            application/json: 
+              schema:
+                $ref: "#/components/schemas/Customers"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        default:
+          description: unexpected error
+          content: 
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: Adds a new customer
+      requestBody:
+        description: Customer to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customers"
+      responses:
+        "201":
+          description: Customer successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customers"
+        "303":
+          description: See Other
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Location of an existing customer
+        "401": 
+          description: Unauthorized
+        "403":
+          description: Forbidden
+  "/customers/{customerId}":
+    get:
+      description: Returns a customer
+      parameters:
+        - name: customerId
+          in: path
+          description: Identifier for a customer
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A customer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customers"
+        "404":
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerNotFound"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: Updates a customer
+      requestBody:
+        description: Customer to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customers"
+      parameters:
+        - name: customerId
+          in: path
+          description: Identifier for a customer
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Customer successfully updated
+        "404":
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerNotFound"
+    delete:
+      description: Deletes a customer
+      parameters:
+        - name: customerId
+          in: path
+          description: Identifier for a customer
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Customer successfully deleted
+        "404":
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerNotFound"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /carts:
+    get:
+      description: Returns a collection of carts
+      responses:
+        "200":
+          description: A collection of carts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Carts"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: Adds a new cart
+      requestBody: 
+        description: Cart to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Carts"
+      responses:
+        "201":
+          description: Cart successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Carts"
+        "303":
+          description: See Other
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Location of an existing cart
+        "401":
+          description: Unauthorized 
+        "403":
+          description: Forbidden
+  "/carts/{cartId}":
+    get:
+      description: Returns a cart
+      parameters:
+        - name: cartId
+          in: path
+          description: Identifier for a cart
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Carts"
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartNotFound"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: Updates a cart
+      requestBody:
+        description: Cart to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Carts"
+      parameters:
+        - name: cartId
+          in: path
+          description: Identifier for a cart
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Cart successfully updated
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartNotFound"
+    delete:
+      description: Deletes a cart
+      parameters:
+        - name: cartId
+          in: path
+          description: Identifier for a cart
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Cart successfully deleted
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartNotFound"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /cartItems:
+    get:
+      description: Returns a collection of items in cart
+      responses:
+        "200":
+          description: A collection of items in cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItems"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: Adds a new item to cart
+      requestBody:
+        description: Item to add to cart
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartItem"
+      responses:
+        "201":
+          description: Item successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItem"
+        "303":
+          description: See Other
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Location of an existing item in cart
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+  "/cartItems/{cartItemId}":
+    get:
+      description: Returns an item from cart
+      parameters:
+        - name: cartItemId
+          in: path
+          description: Identifier for an item in cart
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: An item in cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItem"
+        "404":
+          description: Item not found in cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItemNotFound"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: Updates an item in cart
+      requestBody:
+        description: Item in cart to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartItem"
+      parameters:
+        - name: cartItemId
+          in: path
+          description: Identifier for an item in cart
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Item in cart successfully updated
+        "404":
+          description: Item not found in cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItemNotFound"
+    delete:
+      description: Deletes an item from cart
+      parameters:
+        - name: cartItemId
+          in: path
+          description: Identifier for an item in cart
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Item successfully deleted from cart
+        "404":
+          description: Item not found in cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItemNotFound"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        itemId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          maxLength: 50
+        price:
+          type: number
+          format: floating
+      example:
+        itemId: def5cd03-7bf4-49e9-8f0b-380f90c86ec1
+        name: "Drake Bulldogs Sweatshirt"
+        description: Get comfortable in these sweats and look fly while wearing them
+        price: 19.99
+    Items:
+      type: array
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+      example:
+        - itemId: def5cd03-7bf4-49e9-8f0b-380f90c86ec1
+          name: "Drake Bulldogs Sweatshirt"
+          description: Get comfortable in these sweats and look fly while wearing them
+          price: 19.99
+        - itemId: 504550bc-d21e-43c3-8767-0c1bd59a173c
+          name: "Drake Bulldogs Sweatpants"
+          description: Get comfortable in these sweats and look fly while wearing them
+          price: 19.99
+    ItemNotFound:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+      example:
+        statusCode: 404
+        error: Not Found
+        message: Item not found
+    Customer:
+      type: object
+      properties:
+        FirstName:
+          type: string
+          maxLength: 50
+        LastName:
+          type: string
+          maxLength: 50
+        Email:
+          type: string
+          maxLength: 50
+        PhoneNum: 
+          type: string
+          maxLength: 12
+      example:
+        FirstName: "Samuel"
+        LastName: "Downey"
+        Email: "sam.downey@drake.edu"
+        PhoneNum: "555-555-5555"    
+    Customers:
+      type: array
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Customer"
+      example:
+        FirstName: "Don"
+        LastName: "Bomb"
+        Email: "don.bomb@dot.com"
+        PhoneNum: "555-555-5555"
+    CustomerNotFound:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+      example:
+        statusCode: 404
+        error: Not Found
+        message: Customer not found
+    Cart:
+      type: object
+      properties:
+        cartId:
+          type: string
+          format: uuid
+        cartOwner:
+          type: string
+          maxLength: 50
+        createdDate: 
+          type: string
+          maxLength: 50
+        purchasedDate: 
+          type: string
+          maxLength: 50
+      example:
+        cartId: aiw8ja98-1wq8-52b9-7m0q-539j90m48oe2
+        cartOwner: "Samuel Downey"
+        createdDate: "1-2-2020"
+        purchasedDate: "2-2-2020"
+    Carts:
+      type: array
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Cart"
+      example:
+        cartId: qow9me28-1jq9-43b8-2e0i-536m83w31eq3
+        cartOwner: "Dawn Smith"
+        createdDate: "4-2-2019"
+        purchasedDate: "1-20-2020"
+    CartNotFound:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+      example:
+        statusCode: 404
+        error: Not Found
+        message: Cart not found
+    CartItem:
+      type: object
+      properties:
+        item:
+          type: string
+          maxLength: 50
+        quantity:
+          type: integer
+          maxLength: 25
+      example:
+        item: "Bananas"
+        quantity: 5
+    CartItems:
+      type: array
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+      example:
+        item: "Apples"
+        quantity: 15
+    CartItemNotFound:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+      example:
+        statusCode: 404
+        error: Not Found
+        message: Item not found in cart
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+      example:
+        statusCode: 500
+        error: Unexpected Error
+        message: An unexpected error occurred while processing your request
