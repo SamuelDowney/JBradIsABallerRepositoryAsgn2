@@ -5,11 +5,13 @@ const {when} = require('jest-when');
 const {initCartControllers} = require('../../controllers/cart-controller');
 const {getAllCarts, getCartByCartId, getCartsByCustomerId} = require('../../services/cart-service');
 
+jest.mock('../../services/cart-service');
+
 describe('cart controller', () => {
     let fakeServer,
         expectedCartId,
         expectedCustomerId,
-        expectedCustomers,
+        expectedCart,
         expectedCarts;
 
     beforeAll(() => {
@@ -20,14 +22,20 @@ describe('cart controller', () => {
 
         expectedCartId = uuid.v4();
         expectedCustomerId = uuid.v4();
-        expectedCart = {cartId: expectedCartId};
+        expectedCart = {
+            customerId: expectedCustomerId
+        };
         expectedCarts = [expectedCartId, uuid.v4()];
 
         getAllCarts.mockReturnValue(expectedCarts);
 
-        when(getCartByCartId).calledWith(expectedCartId).mockReturnValue(expectedCart);
+        when(getCartByCartId)
+            .calledWith(expectedCartId)
+            .mockReturnValue(expectedCart);
 
-        when(getCartsByCustomerId).calledWith(expectedCustomerId).mockReturnValue(expectedCarts);
+        when(getCartsByCustomerId)
+            .calledWith(expectedCustomerId)
+            .mockReturnValue(expectedCarts);
 
         initCartControllers(fakeServer);
     });
@@ -52,7 +60,7 @@ describe('cart controller', () => {
 
         expect(response.statusCode).toEqual(200);
         expect(response.result).toEqual(expectedCarts);
-        
+
     });
 
     it('should return NOT_FOUND if a cart does not exist', async () => {
