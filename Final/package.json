@@ -1,0 +1,18 @@
+
+{
+  "name": "RESTfulapiSD",
+  "version": "1.0.0",
+  "description": "RESTful API created in CS 188 @ Drake University by SD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "sd",
+  "license": "ISC",
+  "dependencies": {
+    "restify": "^8.5.1",
+    "restify-errors": "^8.0.2",
+    "uuid": "^8.0.0"
+  }
+}
